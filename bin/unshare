@@ -1,0 +1,9 @@
+#!/bin/bash
+# util-linux 2.34 (Ubuntu 20.04) has no --map-current-user (added in 2.38).
+# The SYCL for Vitis driver (sycl_vxx.py) and its lit tests call it to run v++ in its own PID namespace.
+# Replace it with --map-root-user, which 2.34 supports; files created inside still belong to the calling user.
+args=()
+for a in "$@"; do
+  if [ "$a" = "--map-current-user" ]; then args+=("--map-root-user"); else args+=("$a"); fi
+done
+exec /usr/bin/unshare "${args[@]}"

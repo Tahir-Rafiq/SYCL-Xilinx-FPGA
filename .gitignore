@@ -1,0 +1,31 @@
+# Programs built by bin/sycl-build
+*_hw
+*_hw_emu
+*.new
+compile_*.log
+build_*/
+
+# FPGA images and kernel objects
+*.xclbin
+*.xo
+
+# Files written by XRT, the simulator and Vivado at run time
+.run/
+.Xil/
+.ipcache/
+xcd.log
+xrt.run_summary
+*.wdb
+*.jou
+vivado*.log
+*simulate.log
+*xsc_report.log
+emulation_debug.log
+emconfig.json
+_x/
+
+# Editors and system
+*~
+*.swp
+.vscode/
+.DS_Store

@@ -1,0 +1,36 @@
+#!/bin/bash
+# Build one SYCL program for the U280, in the current folder.
+#
+# Usage: sycl-build <source.cpp> [hw_emu|hw]      (default: hw_emu)
+#   hw_emu  hardware emulation, about 6 minutes. Run: ./<name>_hw_emu
+#   hw      FPGA image for the card, 1 to 1.5 hours. Run on the card: ./<name>_hw
+#
+# Output in the current folder:
+#   <name>_<target>          the program, with the FPGA image inside
+#   compile_<target>.log     compiler output; the last line gives the exit status and minutes
+#   build_<target>/          HLS reports, Vivado project and the commands the compiler ran
+set -e
+src=$1
+target=${2:-hw_emu}
+if [ ! -f "$src" ] || { [ "$target" != hw ] && [ "$target" != hw_emu ]; }; then
+  echo "usage: sycl-build <source.cpp> [hw_emu|hw]"
+  exit 2
+fi
+if [ -z "$XILINX_PLATFORM" ]; then
+  echo "sycl-build: source env.sh from the repository folder first"
+  exit 2
+fi
+name=$(basename "$src" .cpp)_$target
+log=compile_$target.log
+mkdir -p "build_$target"
+# Keep the build folder (reports, logs); the compiler puts it under $TMPDIR
+export SYCL_VXX_KEEP_CLUTTER=True
+export TMPDIR=$PWD/build_$target
+echo "building $name, output in $log"
+start=$(date +%s)
+rc=0
+clang++ -std=c++20 -fsycl -fsycl-targets=fpga64_hls_$target "$src" -o "$name.new" > "$log" 2>&1 || rc=$?
+echo "rc=$rc minutes=$(( ($(date +%s) - start) / 60 ))" | tee -a "$log"
+# The program is renamed only when the build succeeded
+[ $rc -eq 0 ] && mv "$name.new" "$name"
+exit $rc
