@@ -52,7 +52,7 @@ From the repository folder, after `source env.sh`:
 ```bash
 cd examples/matmul
 sycl-build matmul.cpp hw_emu          # about 6 minutes
-./matmul_hw_emu; echo "exit $?"       # about 30 seconds
+./matmul_hw_emu; echo "exit $?"       # 30 s to 15 minutes, see docs/04_emulation.md
 sycl-build matmul.cpp hw              # about 90 minutes
 ./matmul_hw; echo "exit $?"           # on the card
 ```

@@ -33,11 +33,13 @@ cd ../gcn              && sycl-build gcn.cpp hw_emu        && ./gcn_hw_emu data 
 |---|---|---|---|
 | answer_42 | 6 min | 30 s | prints `The universal answer to the question is 42` |
 | vector_add | 6 min | 30 s | exit status 0 |
-| matmul | 6 min | 30 s | `PASSED: 0 errors in 256 values`, exit status 0 |
+| matmul | 6 min | 30 s to 15 min | `PASSED: 0 errors in 256 values`, exit status 0 |
 | gcn, 128 nodes | 7 min | 4 min | `PASSED: 0 errors in 896 values`, exit status 0 |
 | gcn, full graph (`./gcn_hw_emu data`) | same build | 72 min | `PASSED: 0 errors in 18956 values`, exit status 0 |
 
-The builds are independent and can run at the same time in different folders. The programs find out from their embedded image that they are emulation programs and set `XCL_EMULATION_MODE=hw_emu` themselves. In emulation the device is named after the platform, `xilinx_u280_gen3x16_xdma_1_202211_1`. Each example's README has the expected output.
+The builds are independent and can run at the same time in different folders. In a new account the first build also sets up Vivado's files in `~/.Xilinx`; when several first builds start at once, they can all stop after about a minute with `Unable to load Tcl app xilinx::xsim` in `compile_hw_emu.log`. Running the build again fixes it.
+
+The matmul run time varies between runs and hosts, from 30 s to 15 minutes in our runs: its four kernels wait for each other through pipes while the host starts them one after the other, and the simulator simulates all that waiting. The programs find out from their embedded image that they are emulation programs and set `XCL_EMULATION_MODE=hw_emu` themselves. In emulation the device is named after the platform, `xilinx_u280_gen3x16_xdma_1_202211_1`. Each example's README has the expected output.
 
 ## What to look at
 
@@ -49,6 +51,6 @@ The builds are independent and can run at the same time in different folders. Th
 
 The kernel names in the reports are generated from the names in the source with a hash added, for example `handlerEE_clES2_E3add_yN5WAcwV` for the kernel `add` of vector_add.
 
-The run writes simulator files to `.run/<pid>/` in the current folder, plus `emulation_debug.log`, `xcd.log` and two simulator logs whose names end in `_simulate.log` and `_xsc_report.log`. `.gitignore` covers all of them. For gcn on the full graph, `.run/<pid>/hw_emu/device0/binary_0/behav_waveform/xsim/output.txt` grows to about 280 MB of harmless DSP48 warnings. Delete `.run/` after looking at the results.
+The run writes simulator files to `.run/<pid>/` in the current folder, plus `emulation_debug.log`, `xcd.log` and two simulator logs whose names end in `_simulate.log` and `_xsc_report.log`. `.gitignore` covers all of them. For gcn on the full graph, `.run/<pid>/hw_emu/device0/binary_0/behav_waveform/xsim/output.txt` grows to about 280 MB of harmless DSP48 warnings. Each run leaves 300 to 400 MB in `.run/`; delete it after looking at the results.
 
 The emulation run needs the variable `USER`, which a normal login sets. Without it the simulator stops with `ERROR: [HW-EMU 26] $USER variable is not SET`.
