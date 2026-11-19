@@ -10,6 +10,7 @@ triSYCL/sycl, the SYCL compiler for AMD FPGAs used for all examples, a fork of I
 - License: Apache License v2.0 with LLVM Exceptions ([LICENSES/LLVM-Apache-2.0-WITH-LLVM-exception.txt](LICENSES/LLVM-Apache-2.0-WITH-LLVM-exception.txt)).
 - The compiler is not part of this repository. [scripts/build_compiler.sh](scripts/build_compiler.sh) downloads that commit and builds it.
 - [examples/answer_42/answer_42.cpp](examples/answer_42/answer_42.cpp) and [examples/vector_add/vector_add.cpp](examples/vector_add/vector_add.cpp) are unchanged copies of `sycl/test/vitis/simple_tests/answer_42.cpp` and `sycl/test/vitis/simple_tests/single_task_vector_add.cpp` from that commit, under the same license.
+- The kernel of [examples/edge_detection/edge_detection.cpp](examples/edge_detection/edge_detection.cpp) and the picture `examples/edge_detection/data/eiffel.bmp` come from `sycl/test/vitis/edge_detection` of that commit (a SYCL translation of the `vision/edge_detection` example of [Xilinx/SDAccel_Examples](https://github.com/Xilinx/SDAccel_Examples)), under the same license. The rest of the program (BMP reader and writer, crop, CPU version, check) was written for this repository.
 
 ## Matrix multiply example
 

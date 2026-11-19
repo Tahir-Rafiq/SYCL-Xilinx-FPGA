@@ -1,6 +1,6 @@
 # SYCL-Xilinx-FPGA
 
-Four SYCL examples that go from a single C++ source file to kernels running on an AMD Alveo U280 FPGA card, built with the [triSYCL/sycl](https://github.com/triSYCL/sycl) compiler and AMD Vitis 2023.2. Each example builds for hardware emulation (minutes, no card needed) and for the card (about an hour), and each comes with the log of a run on a U280 and an explanation of every line of it.
+Four SYCL examples that go from a single C++ source file to kernels running on an AMD Alveo U280 FPGA card, built with the [triSYCL/sycl](https://github.com/triSYCL/sycl) compiler and AMD Vitis 2023.2. Each example builds for hardware emulation (minutes, no card needed) and for the card (about an hour), and each comes with the log of a run on a U280 and an explanation of every line of it. A fifth folder, [edge_detection](examples/edge_detection/), is an exercise in hardware emulation: the same image filter on one CPU core and on the FPGA, measured, compared and then made faster.
 
 The repository was prepared for a seminar on SYCL for FPGAs at the University of Siena.
 
@@ -9,6 +9,7 @@ The repository was prepared for a seminar on SYCL for FPGAs at the University of
 | [answer_42](examples/answer_42/) | one kernel writes 42 into a buffer | the whole path from source to card, nothing else | prints 42 |
 | [vector_add](examples/vector_add/) | sum of two vectors of 300 integers | data copies, loops as hardware pipelines, on-chip memory | all 300 values checked |
 | [matmul](examples/matmul/) | 16x16 integer matrix product on a 4x4 systolic array | four kernels running together, connected by pipes | all 256 values checked |
+| [edge_detection](examples/edge_detection/) | Sobel edge filter on a 1024 x 1895 picture, on one CPU core and on the FPGA | an exercise: measure both, find why the FPGA loop is slow, make it faster | FPGA and CPU pictures equal |
 | [gcn](examples/gcn/) | inference of a trained two-layer graph convolutional network on the Cora citation graph (2708 papers) | real data, float arithmetic, sparse matrices, banked on-chip memory, three dependent kernels | all 18956 outputs checked; 81.1% test accuracy |
 
 ## Requirements
@@ -84,6 +85,6 @@ The other examples work the same way; their READMEs give the commands and the ex
 
 ## License and acknowledgements
 
-The repository is under the MIT license ([LICENSE](LICENSE)). The two first examples come from the triSYCL/sycl compiler (Apache License v2.0 with LLVM Exceptions), the matrix multiply is simplified from Intel's oneAPI-samples (MIT), and the GCN example uses the model of Kipf and Welling, the Cora dataset in the version distributed with parallel-gcn, and weights trained with parallel-gcn. [ACKNOWLEDGEMENTS.md](ACKNOWLEDGEMENTS.md) lists every source with its license and citation.
+The repository is under the MIT license ([LICENSE](LICENSE)). The two first examples and the kernel and picture of the edge_detection exercise come from the triSYCL/sycl compiler (Apache License v2.0 with LLVM Exceptions), the matrix multiply is simplified from Intel's oneAPI-samples (MIT), and the GCN example uses the model of Kipf and Welling, the Cora dataset in the version distributed with parallel-gcn, and weights trained with parallel-gcn. [ACKNOWLEDGEMENTS.md](ACKNOWLEDGEMENTS.md) lists every source with its license and citation.
 
 AMD, Alveo, Vitis, Vivado and Xilinx are trademarks of Advanced Micro Devices, Inc. This repository is not affiliated with AMD.
